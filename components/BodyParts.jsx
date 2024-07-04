@@ -1,60 +1,98 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { bodyParts } from '../constants';
-import { TouchableOpacity } from 'react-native-web';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { bodyParts } from '../constants';
+import { useNavigation } from '@react-navigation/native';
 
 export default function BodyParts() {
-    const router = useRouter();
+  const navigation = useNavigation();
+
   return (
-    <View className="mx-4">
-      <Text style={{fontSize:hp(3)}} className="font-semibold text-neutral-700">Exercises</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Exercises</Text>
 
       <FlatList
         data={bodyParts}
         numColumns={2}
         keyExtractor={item => item.name}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 50, paddingTop: 20}}
-        columnWrapperStyle={{justifyContent: 'space-between'}}
-        renderItem={({item, index}) => <BodyPartCard router={router} index={index} item={item} />}
+        contentContainerStyle={styles.flatListContent}
+        columnWrapperStyle={styles.columnWrapper}
+        renderItem={({ item, index }) => <BodyPartCard navigation={navigation} index={index} item={item} />}
       />
     </View>
   );
 }
 
-const BodyPartCard = ({item, router, index}) => {
-    return(
-        <View>
-            <TouchableOpacity
-            onPress={() => router.push({pathname: '/exercises', params: item})}
-                style={{width: wp(44), height: wp(52)}}
-                className="flex justify-end p-4 mb-4">
-                    <Image 
-                        source={item.image}
-                        resizeMode="cover"
-                        style = {{width: wp(44), height: wp(52)}}
-                        className="rounded-[35px] absolute"
-                    />
-                    <LinearGradient
-                        colors={['transparent', 'rgba(0,0,0,0.9)']}
-                        style={{width: wp(44), height: hp(15)}}
-                        start={{x: 0.5, y: 0}}
-                        end={{x: 0.5, y: 1}}
-                        className="absolute bottom-0 rounded-[35px]"
-                    />
-
-                    <Text 
-                        style={{fontSize: hp(2.3)}}
-                        className="text-white font-semibold text-center tracking-wide"
-                    >
-                        {item?.name}
-                    </Text>
-
-            </TouchableOpacity>
-        </View>
-    )
+const BodyPartCard = ({ item, navigation, index }) => {
+  return (
+    <View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('exercises', { item })}
+        style={styles.card}
+      >
+        <Image
+          source={item.image}
+          resizeMode="cover"
+          style={styles.image}
+        />
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.9)']}
+          style={styles.gradient}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+        />
+        <Text style={styles.cardText}>
+          {item?.name}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: hp(3),
+    fontWeight: '600',
+    color: '#4B5563',
+  },
+  flatListContent: {
+    paddingBottom: 50,
+    paddingTop: 20,
+  },
+  columnWrapper: {
+    justifyContent: 'space-between',
+  },
+  card: {
+    width: wp(44),
+    height: wp(52),
+    justifyContent: 'flex-end',
+    padding: 16,
+    marginBottom: 16,
+  },
+  image: {
+    width: wp(44),
+    height: wp(52),
+    borderRadius: 35,
+    position: 'absolute',
+  },
+  gradient: {
+    width: wp(44),
+    height: wp(15),
+    position: 'absolute',
+    bottom: 0,
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
+  },
+  cardText: {
+    fontSize: hp(2.3),
+    color: 'white',
+    fontWeight: '600',
+    textAlign: 'center',
+    letterSpacing: 0.5,
+  },
+});
