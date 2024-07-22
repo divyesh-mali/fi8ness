@@ -58,7 +58,6 @@ const styles = StyleSheet.create({});
 
 {/*
 
-Code which started giving error at around 17:39 in the video in the part mentioned with comment.
 
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'

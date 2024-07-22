@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { LinearGradient } from 'expo-linear-gradient';
 import { bodyParts } from '../constants';
 import { useNavigation } from '@react-navigation/native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 export default function BodyParts() {
   const navigation = useNavigation();
@@ -15,7 +16,7 @@ export default function BodyParts() {
       <FlatList
         data={bodyParts}
         numColumns={2}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item.title}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatListContent}
         columnWrapperStyle={styles.columnWrapper}
@@ -44,10 +45,11 @@ const BodyPartCard = ({ item, navigation, index }) => {
           end={{ x: 0.5, y: 1 }}
         />
         <Text style={styles.cardText}>
-          {item?.name}
+          {item?.title}
         </Text>
       </TouchableOpacity>
     </View>
+    
   );
 }
 
@@ -79,6 +81,7 @@ const styles = StyleSheet.create({
     height: wp(52),
     borderRadius: 35,
     position: 'absolute',
+    // margin: 10
   },
   gradient: {
     width: wp(44),
